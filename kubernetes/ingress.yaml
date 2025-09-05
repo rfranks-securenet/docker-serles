@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: serles
+  labels:
+    app.kubernetes.io/instance: serles
+    app.kubernetes.io/name: serles
+    app.kubernetes.io/version: 1.2.0
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    external-dns.alpha.kubernetes.io/hostname: serles.example.com
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - serles.example.com
+      secretName: serles-tls
+  rules:
+    - host: serles.example.com
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: serles
+                port:
+                  number: 80

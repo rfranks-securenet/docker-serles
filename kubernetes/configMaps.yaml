@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: serles-config
+  labels:
+    app.kubernetes.io/instance: serles
+    app.kubernetes.io/name: serles
+    app.kubernetes.io/version: 1.2.0
+data:
+  config.ini: |
+    [serles]
+
+    database = sqlite:////etc/serles/db.sqlite
+    backend = serles.backends.certbot
+
+    allowedServerIpRanges =
+      ::1/128
+      127.0.0.0/8
+      10.0.0.0/8
+    excludeServerIpRanges =
+      127.0.0.2/32
+
+    verifyPTR = false
+
+    allowWildcards = false
+
+    subjectNameTemplate = CN={SAN[0]}
+
+    forceTemplateDN = true
+
+    [certbot]
+    path = /serles/bin/certbot
+    config-file = /etc/serles/certbot-cli.ini

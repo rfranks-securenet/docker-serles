@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: serles
+  labels:
+    app.kubernetes.io/instance: serles
+    app.kubernetes.io/name: serles
+    app.kubernetes.io/version: 1.2.0
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http
+  selector:
+    app.kubernetes.io/component: serles
+    app.kubernetes.io/name: serles
+    app.kubernetes.io/instance: serles
+  type: ClusterIP

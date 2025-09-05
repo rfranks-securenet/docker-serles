@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: serles-acme
+  labels:
+    app.kubernetes.io/component: serles
+    app.kubernetes.io/instance: serles
+    app.kubernetes.io/name: serles
+    app.kubernetes.io/version: 1.2.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: serles
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/component: serles
+        app.kubernetes.io/instance: serles
+        app.kubernetes.io/name: serles
+        app.kubernetes.io/version: 1.2.0
+    spec:
+      containers:
+        - name: serles
+          image: ghcr.io/rfranks-securenet/serles:1.2.0
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - name: serles-database
+              mountPath: /etc/serles
+            - name: serles-config
+              mountPath: /etc/serles/config.ini
+              subPath: config.ini
+            - name: certbot-configuration
+              mountPath: /etc/serles/cloudflare.ini
+              subPath: cloudflare.ini
+            - name: certbot-configuration
+              mountPath: /etc/serles/certbot-cli.ini
+              subPath: cli.ini
+          imagePullPolicy: Always
+      volumes:
+        - name: serles-database
+          persistentVolumeClaim:
+            claimName: serles-pvc
+        - name: serles-config
+          configMap:
+            name: serles-config
+        - name: certbot-configuration
+          secret:
+            secretName: certbot-configuration
+            defaultMode: 384
