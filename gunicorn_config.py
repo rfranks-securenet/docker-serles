@@ -5,3 +5,4 @@ accesslog = "-"
 disable_redirect_access_to_syslog = True
 
 workers = 1
+timeout = 0
